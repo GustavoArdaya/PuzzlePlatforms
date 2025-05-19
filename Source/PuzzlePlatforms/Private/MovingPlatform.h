@@ -22,13 +22,18 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 
-
-private:
-
 	UPROPERTY(EditAnywhere, Category = Movement)
-	float MovementSpeed = 10.f;
+	float MovementSpeed = 20.f;
 
 	UPROPERTY(EditAnywhere, Category = Movement, meta=(MakeEditWidget = true))
 	FVector TargetLocation;
+
+
+private:
+
+	FVector GlobalTargetLocation;
+	FVector GlobalStartLocation;
+
+	
 	
 };
