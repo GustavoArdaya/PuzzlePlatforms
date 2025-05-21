@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "PlatformTrigger.generated.h"
 
+class AMovingPlatform;
 class UBoxComponent;
 
 UCLASS()
@@ -38,5 +39,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* TriggerMesh;
+
+	UPROPERTY(EditAnywhere)
+	TArray<AMovingPlatform*> PlatformsToTrigger;
 
 };

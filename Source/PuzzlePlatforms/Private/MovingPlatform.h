@@ -16,6 +16,10 @@ class AMovingPlatform : public AStaticMeshActor
 public:
 	
 	AMovingPlatform();
+	
+	void AddActiveTrigger();
+
+	void RemoveActiveTrigger();
 
 protected:
 
@@ -34,6 +38,7 @@ private:
 	FVector GlobalTargetLocation;
 	FVector GlobalStartLocation;
 
-	
+	UPROPERTY(EditAnywhere)
+	int32 ActiveTriggers = 1;
 	
 };
