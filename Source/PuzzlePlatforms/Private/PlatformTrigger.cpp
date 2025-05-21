@@ -16,14 +16,30 @@ APlatformTrigger::APlatformTrigger()
 
 	TriggerMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TriggerMesh"));
 	TriggerMesh->SetupAttachment(TriggerVolume);
-
+	
+	
 }
 
 // Called when the game starts or when spawned
 void APlatformTrigger::BeginPlay()
 {
 	Super::BeginPlay();
+
+	TriggerVolume->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnComponentBeginOverlap);
+	TriggerVolume->OnComponentEndOverlap.AddDynamic(this, &ThisClass::OnComponentEndOverlap);
 	
+}
+
+void APlatformTrigger::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Activated"));
+}
+
+void APlatformTrigger::OnComponentEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Deactivated"));
 }
 
 // Called every frame
