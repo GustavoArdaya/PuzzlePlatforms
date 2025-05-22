@@ -18,6 +18,9 @@ public:
 	
 	UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer);
 
+	UPROPERTY(EditDefaultsOnly)
+	TSoftClassPtr<UUserWidget> MenuWidgetClass;
+
 	virtual void Init() override;
 
 	UFUNCTION(Exec)
