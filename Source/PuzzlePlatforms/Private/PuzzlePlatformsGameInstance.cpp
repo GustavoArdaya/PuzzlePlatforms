@@ -19,6 +19,17 @@ void UPuzzlePlatformsGameInstance::Init()
 	}
 }
 
+void UPuzzlePlatformsGameInstance::LoadMenu()
+{
+	if (MenuWidgetClass)
+	{
+		if (UUserWidget* MenuWidget = CreateWidget<UUserWidget>(this, MenuWidgetClass.Get()))
+		{
+			MenuWidget->AddToViewport();
+		}
+	}
+}
+
 void UPuzzlePlatformsGameInstance::Host()
 {
 	const FString MapName = "/Game/ThirdPerson/Maps/ThirdPersonMap";
