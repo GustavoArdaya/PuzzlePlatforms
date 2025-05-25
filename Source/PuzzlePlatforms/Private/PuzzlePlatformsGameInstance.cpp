@@ -58,6 +58,11 @@ void UPuzzlePlatformsGameInstance::Host()
 
 void UPuzzlePlatformsGameInstance::Join(const FString& Address)
 {
+	if (MenuWidget)
+    {
+    	MenuWidget->Teardown();
+    }
+
 	if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(0, 5, FColor::Green, FString::Printf(TEXT("Joining %s"), *Address));
