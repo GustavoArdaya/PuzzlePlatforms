@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MenuInterface.h"
 #include "Blueprint/UserWidget.h"
 #include "MainMenu.generated.h"
 
@@ -13,6 +14,10 @@ UCLASS()
 class UMainMenu : public UUserWidget
 {
 	GENERATED_BODY()
+
+public:
+
+	FORCEINLINE void SetMenuInterface(IMenuInterface* InMenuInterface) { MenuInterface = InMenuInterface; }
 
 protected:
 	
@@ -28,5 +33,7 @@ private:
 
 	UFUNCTION()
 	void HostServer();
+
+	IMenuInterface* MenuInterface;
 	
 };

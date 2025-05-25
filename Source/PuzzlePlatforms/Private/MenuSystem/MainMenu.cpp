@@ -17,4 +17,8 @@ bool UMainMenu::Initialize()
 void UMainMenu::HostServer()
 {
 	UE_LOG(LogTemp, Display, TEXT("Host Button Clicked"));
+	if (MenuInterface)
+	{
+		MenuInterface->Host();
+	}
 }
