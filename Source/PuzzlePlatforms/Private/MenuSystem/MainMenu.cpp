@@ -4,6 +4,7 @@
 #include "MenuSystem/MainMenu.h"
 
 #include "Components/Button.h"
+#include "Components/WidgetSwitcher.h"
 
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -41,9 +42,11 @@ void UMainMenu::Teardown()
 
 bool UMainMenu::Initialize()
 {
-	if (!Super::Initialize() || !HostButton || !JoinButton) return false;
+	if (!Super::Initialize() || !HostButton || !JoinMenuButton) return false;
 
 	HostButton->OnClicked.AddDynamic(this, &ThisClass::HostServer);
+	JoinMenuButton->OnClicked.AddDynamic(this, &ThisClass::OpenJoinMenu);
+	BackButton->OnClicked.AddDynamic(this, &ThisClass::OpenMainMenu);
 	
 	return true;
 }
@@ -54,5 +57,21 @@ void UMainMenu::HostServer()
 	if (MenuInterface)
 	{
 		MenuInterface->Host();
+	}
+}
+
+void UMainMenu::OpenJoinMenu()
+{
+	if (MenuSwitcher && JoinMenu)
+	{
+		MenuSwitcher->SetActiveWidget(JoinMenu);
+	}
+}
+
+void UMainMenu::OpenMainMenu()
+{
+	if (MenuSwitcher && MainMenu)
+	{
+		MenuSwitcher->SetActiveWidget(MainMenu);
 	}
 }
