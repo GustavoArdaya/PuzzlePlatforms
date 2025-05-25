@@ -17,6 +17,11 @@ class UMainMenu : public UUserWidget
 
 public:
 
+	UMainMenu(const FObjectInitializer& ObjectInitializer);
+	
+
+	void Setup();
+	void Teardown(); 
 	FORCEINLINE void SetMenuInterface(IMenuInterface* InMenuInterface) { MenuInterface = InMenuInterface; }
 
 protected:

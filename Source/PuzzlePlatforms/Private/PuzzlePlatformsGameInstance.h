@@ -7,6 +7,7 @@
 #include "MenuSystem/MenuInterface.h"
 #include "PuzzlePlatformsGameInstance.generated.h"
 
+class UMainMenu;
 /**
  * 
  */
@@ -32,4 +33,8 @@ public:
 	
 	UFUNCTION(Exec)
 	void Join(const FString& Address);
+
+private:
+
+	UMainMenu* MenuWidget;
 };
