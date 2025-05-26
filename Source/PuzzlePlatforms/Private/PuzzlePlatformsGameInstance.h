@@ -25,7 +25,7 @@ public:
 
 	virtual void Init() override;
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable, Exec)
 	void LoadMenu();
 
 	UFUNCTION(Exec)

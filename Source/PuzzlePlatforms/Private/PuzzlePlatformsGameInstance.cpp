@@ -22,9 +22,10 @@ void UPuzzlePlatformsGameInstance::Init()
 
 void UPuzzlePlatformsGameInstance::LoadMenu()
 {
-	if (MenuWidgetClass)
+	if (MenuWidgetClass.IsValid() || !MenuWidgetClass.IsNull())
 	{
-		MenuWidget = CreateWidget<UMainMenu>(this, MenuWidgetClass.Get());		
+		UClass* LoadedClass = MenuWidgetClass.LoadSynchronous();
+		MenuWidget = CreateWidget<UMainMenu>(this, LoadedClass);
 
 		if (MenuWidget)
 		{
