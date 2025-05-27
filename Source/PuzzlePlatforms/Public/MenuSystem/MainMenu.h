@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "MenuInterface.h"
+#include "MenuWidgetBase.h"
 #include "Blueprint/UserWidget.h"
 #include "MainMenu.generated.h"
 
@@ -11,18 +11,13 @@
  * 
  */
 UCLASS()
-class UMainMenu : public UUserWidget
+class UMainMenu : public UMenuWidgetBase
 {
 	GENERATED_BODY()
 
 public:
 
-	UMainMenu(const FObjectInitializer& ObjectInitializer);
-	
-
-	void Setup();
-	void Teardown(); 
-	FORCEINLINE void SetMenuInterface(IMenuInterface* InMenuInterface) { MenuInterface = InMenuInterface; }
+	UMainMenu(const FObjectInitializer& ObjectInitializer);		
 
 protected:
 	
@@ -65,7 +60,5 @@ private:
 
 	UFUNCTION()
 	void OpenMainMenu();
-
-	IMenuInterface* MenuInterface;
 	
 };

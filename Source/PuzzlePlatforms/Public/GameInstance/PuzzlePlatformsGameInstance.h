@@ -7,6 +7,7 @@
 #include "MenuSystem/MenuInterface.h"
 #include "PuzzlePlatformsGameInstance.generated.h"
 
+class UMenuWidgetBase;
 class UMainMenu;
 /**
  * 
@@ -23,10 +24,16 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSoftClassPtr<UUserWidget> MenuWidgetClass;
 
+	UPROPERTY(EditDefaultsOnly)
+	TSoftClassPtr<UUserWidget> InGameMenuClass;
+
 	virtual void Init() override;
 
 	UFUNCTION(BlueprintCallable, Exec)
 	void LoadMenu();
+
+	UFUNCTION(BlueprintCallable, Exec)
+	void LoadInGameMenu();
 
 	UFUNCTION(Exec)
 	void Host();
@@ -36,5 +43,6 @@ public:
 
 private:
 
-	UMainMenu* MenuWidget;
+	UMenuWidgetBase* MainMenuWidget;
+	UMenuWidgetBase* InGameMenuWidget;
 };

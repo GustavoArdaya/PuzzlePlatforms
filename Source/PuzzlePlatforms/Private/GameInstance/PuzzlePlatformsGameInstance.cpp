@@ -4,6 +4,7 @@
 #include "GameInstance/PuzzlePlatformsGameInstance.h"
 #include "Blueprint/UserWidget.h"
 #include "MenuSystem/MainMenu.h"
+#include "MenuSystem/MenuWidgetBase.h"
 
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {	
@@ -24,13 +25,28 @@ void UPuzzlePlatformsGameInstance::LoadMenu()
 {
 	if (MenuWidgetClass.IsValid() || !MenuWidgetClass.IsNull())
 	{
-		UClass* LoadedClass = MenuWidgetClass.LoadSynchronous();
-		MenuWidget = CreateWidget<UMainMenu>(this, LoadedClass);
+		UClass* LoadedMainMenuClass = MenuWidgetClass.LoadSynchronous();
+		MainMenuWidget = CreateWidget<UMenuWidgetBase>(this, LoadedMainMenuClass);
 
-		if (MenuWidget)
+		if (MainMenuWidget)
 		{
-			MenuWidget->Setup();
-			MenuWidget->SetMenuInterface(this);
+			MainMenuWidget->Setup();
+			MainMenuWidget->SetMenuInterface(this);
+		}
+	}
+}
+
+void UPuzzlePlatformsGameInstance::LoadInGameMenu()
+{
+	if (InGameMenuClass.IsValid() || !InGameMenuClass.IsNull())
+	{
+		UClass* LoadedInGameMenuClass = InGameMenuClass.LoadSynchronous();
+		InGameMenuWidget = CreateWidget<UMenuWidgetBase>(this, LoadedInGameMenuClass);
+
+		if (InGameMenuWidget)
+		{
+			InGameMenuWidget->Setup();
+			InGameMenuWidget->SetMenuInterface(this);
 		}
 	}
 }
@@ -40,9 +56,9 @@ void UPuzzlePlatformsGameInstance::Host()
 	
 	const FString MapName = "/Game/ThirdPerson/Maps/ThirdPersonMap";
 	
-	if (MenuWidget)
+	if (MainMenuWidget)
 	{
-		MenuWidget->Teardown();
+		MainMenuWidget->Teardown();
 	}
 	
 	if (GEngine)
@@ -59,9 +75,9 @@ void UPuzzlePlatformsGameInstance::Host()
 
 void UPuzzlePlatformsGameInstance::Join(const FString& Address)
 {
-	if (MenuWidget)
+	if (MainMenuWidget)
     {
-    	MenuWidget->Teardown();
+    	MainMenuWidget->Teardown();
     }
 
 	if (GEngine)

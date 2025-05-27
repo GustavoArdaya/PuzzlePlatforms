@@ -13,34 +13,6 @@ UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer)
 	SetIsFocusable(true);
 }
 
-void UMainMenu::Setup()
-{
-	this->AddToViewport();
-	
-	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
-	{
-		FInputModeUIOnly InputModeData;
-		InputModeData.SetWidgetToFocus(this->TakeWidget());
-		InputModeData.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
-			
-		PlayerController->SetInputMode(InputModeData);
-		PlayerController->bShowMouseCursor = true;		
-	}
-}
-
-void UMainMenu::Teardown()
-{
-	this->RemoveFromParent();
-	
-	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
-	{
-		FInputModeGameOnly InputModeData;
-
-		PlayerController->SetInputMode(InputModeData);
-		PlayerController->bShowMouseCursor = false;		
-	};
-}
-
 bool UMainMenu::Initialize()
 {
 	if (!Super::Initialize() || !HostButton || !JoinMenuButton) return false;
