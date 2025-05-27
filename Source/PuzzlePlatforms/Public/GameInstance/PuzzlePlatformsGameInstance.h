@@ -27,6 +27,9 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSoftClassPtr<UUserWidget> InGameMenuClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Main Menu")
+	TSoftObjectPtr<UWorld> MainMenuMap;
+
 	virtual void Init() override;
 
 	UFUNCTION(BlueprintCallable, Exec)
@@ -36,10 +39,13 @@ public:
 	void LoadInGameMenu();
 
 	UFUNCTION(Exec)
-	void Host();
+	virtual void Host() override;
 	
 	UFUNCTION(Exec)
-	void Join(const FString& Address);
+	virtual void Join(const FString& Address) override;
+
+	UFUNCTION(Exec)
+	virtual void LoadMainMenu() override;
 
 private:
 

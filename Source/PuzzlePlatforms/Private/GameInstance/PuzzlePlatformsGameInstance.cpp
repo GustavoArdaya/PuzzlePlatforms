@@ -90,3 +90,18 @@ void UPuzzlePlatformsGameInstance::Join(const FString& Address)
 		PlayerController->ClientTravel(Address, ETravelType::TRAVEL_Absolute);
 	}
 }
+
+void UPuzzlePlatformsGameInstance::LoadMainMenu()
+{
+	if (APlayerController* PlayerController = GetFirstLocalPlayerController())
+	{
+		if (MainMenuMap.ToSoftObjectPath().IsValid())
+		{
+			FString MapPath = MainMenuMap.ToSoftObjectPath().ToString();
+			// Trim any "/Game/Maps/MyMap.MyMap" to "/Game/Maps/MyMap"
+			MapPath = FPackageName::ObjectPathToPackageName(MapPath);
+			
+			PlayerController->ClientTravel(MapPath, ETravelType::TRAVEL_Absolute);
+		}
+	}
+}
