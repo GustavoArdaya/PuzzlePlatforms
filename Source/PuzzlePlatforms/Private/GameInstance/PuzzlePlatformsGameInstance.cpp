@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PuzzlePlatformsGameInstance.h"
+#include "GameInstance/PuzzlePlatformsGameInstance.h"
 #include "Blueprint/UserWidget.h"
 #include "MenuSystem/MainMenu.h"
 

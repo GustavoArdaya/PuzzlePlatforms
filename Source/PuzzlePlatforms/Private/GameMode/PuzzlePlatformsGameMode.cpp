@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "PuzzlePlatformsGameMode.h"
-#include "PuzzlePlatformsCharacter.h"
+#include "GameMode/PuzzlePlatformsGameMode.h"
+#include "Character/PuzzlePlatformsCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 APuzzlePlatformsGameMode::APuzzlePlatformsGameMode()
