@@ -6,6 +6,7 @@
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
 #include "Components/WidgetSwitcher.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -68,6 +69,6 @@ void UMainMenu::QuitGame()
 {
 	if (APlayerController* PlayerController = GetWorld()->GetFirstPlayerController())
 	{
-		PlayerController->ConsoleCommand("quit");
+		UKismetSystemLibrary::QuitGame(GetWorld(), PlayerController, EQuitPreference::Quit, false);
 	}
 }
