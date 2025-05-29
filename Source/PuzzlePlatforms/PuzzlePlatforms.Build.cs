@@ -11,6 +11,6 @@ public class PuzzlePlatforms : ModuleRules
 		PublicIncludePaths.AddRange(new string[] {"PuzzlePlatforms/Public"});
 		PrivateIncludePaths.AddRange(new string[] {"PuzzlePlatforms/Private"});
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG", "OnlineSubsystem", "OnlineSubsystemUtils" });
 	}
 }

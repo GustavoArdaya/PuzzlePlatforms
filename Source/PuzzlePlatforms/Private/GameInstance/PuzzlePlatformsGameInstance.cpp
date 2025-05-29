@@ -3,8 +3,9 @@
 
 #include "GameInstance/PuzzlePlatformsGameInstance.h"
 #include "Blueprint/UserWidget.h"
-#include "MenuSystem/MainMenu.h"
+#include "OnlineSubsystem.h"
 #include "MenuSystem/MenuWidgetBase.h"
+#include "OnlineSessionSettings.h"
 
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {	
@@ -14,10 +15,20 @@ UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitiali
 void UPuzzlePlatformsGameInstance::Init()
 {
 	Super::Init();
-	UE_LOG(LogTemp, Warning, TEXT("GameInstance initialized"));
-	if (MenuWidgetClass)
+
+	if (IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Found class %s"), *MenuWidgetClass->GetName());
+		UE_LOG(LogTemp, Warning, TEXT("OnlineSubsystem Instance Name: %s"), *OnlineSubsystem->GetInstanceName().ToString());
+		UE_LOG(LogTemp, Warning, TEXT("OnlineSubsystem Subsystem Name: %s"), *OnlineSubsystem->GetSubsystemName().ToString());
+		SessionInterface = OnlineSubsystem->GetSessionInterface();
+		if (SessionInterface.IsValid())
+		{			
+			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &ThisClass::OnCreateSessionComplete);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found no Subsystem"));
 	}
 }
 
@@ -53,6 +64,20 @@ void UPuzzlePlatformsGameInstance::LoadInGameMenu()
 
 void UPuzzlePlatformsGameInstance::Host()
 {
+	if (SessionInterface.IsValid())
+	{
+		FOnlineSessionSettings SessionSettings;
+		SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);	
+	}	
+}
+
+void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool Success)
+{
+	if (!Success)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Could not create session"));
+		return;
+	}
 	
 	const FString MapName = "/Game/ThirdPerson/Maps/ThirdPersonMap";
 	
@@ -105,3 +130,5 @@ void UPuzzlePlatformsGameInstance::LoadMainMenu()
 		}
 	}
 }
+
+
