@@ -7,6 +7,9 @@
 #include "MenuSystem/MenuWidgetBase.h"
 #include "OnlineSessionSettings.h"
 
+const static FName SESSION_NAME = TEXT("My Session Game");
+
+
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {	
 	UE_LOG(LogTemp, Warning, TEXT("GameInstance constructed"));
@@ -17,13 +20,13 @@ void UPuzzlePlatformsGameInstance::Init()
 	Super::Init();
 
 	if (IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("OnlineSubsystem Instance Name: %s"), *OnlineSubsystem->GetInstanceName().ToString());
+	{		
 		UE_LOG(LogTemp, Warning, TEXT("OnlineSubsystem Subsystem Name: %s"), *OnlineSubsystem->GetSubsystemName().ToString());
 		SessionInterface = OnlineSubsystem->GetSessionInterface();
 		if (SessionInterface.IsValid())
 		{			
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &ThisClass::OnCreateSessionComplete);
+			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &ThisClass::OnDestroySessionComplete);
 		}
 	}
 	else
@@ -65,9 +68,15 @@ void UPuzzlePlatformsGameInstance::LoadInGameMenu()
 void UPuzzlePlatformsGameInstance::Host()
 {
 	if (SessionInterface.IsValid())
-	{
-		FOnlineSessionSettings SessionSettings;
-		SessionInterface->CreateSession(0, TEXT("My Session Game"), SessionSettings);	
+	{		
+		if (FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME))
+		{
+			SessionInterface->DestroySession(SESSION_NAME);
+		}
+		else
+		{
+			CreateSession();
+		}		
 	}	
 }
 
@@ -96,6 +105,23 @@ void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bo
 	{
 		World->ServerTravel(MapName + "?listen");
 	}
+}
+
+void UPuzzlePlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool Success)
+{
+	if (Success)
+	{
+		CreateSession();
+	}
+}
+
+void UPuzzlePlatformsGameInstance::CreateSession()
+{
+	if (SessionInterface.IsValid())
+	{
+		FOnlineSessionSettings SessionSettings;
+		SessionInterface->CreateSession(0, SESSION_NAME, SessionSettings);	
+	}		
 }
 
 void UPuzzlePlatformsGameInstance::Join(const FString& Address)
