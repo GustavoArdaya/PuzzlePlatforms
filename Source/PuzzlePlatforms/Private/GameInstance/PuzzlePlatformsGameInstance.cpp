@@ -27,6 +27,14 @@ void UPuzzlePlatformsGameInstance::Init()
 		{			
 			SessionInterface->OnCreateSessionCompleteDelegates.AddUObject(this, &ThisClass::OnCreateSessionComplete);
 			SessionInterface->OnDestroySessionCompleteDelegates.AddUObject(this, &ThisClass::OnDestroySessionComplete);
+			
+			SessionInterface->OnFindSessionsCompleteDelegates.AddUObject(this, &ThisClass::OnFindSessionComplete);			
+			SessionSearch = MakeShareable(new FOnlineSessionSearch());
+			if (SessionSearch.IsValid())
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Starting FindSessions"));
+				SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());				
+			}
 		}
 	}
 	else
@@ -80,9 +88,9 @@ void UPuzzlePlatformsGameInstance::Host()
 	}	
 }
 
-void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool Success)
+void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
 {
-	if (!Success)
+	if (!bWasSuccessful)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Could not create session"));
 		return;
@@ -107,12 +115,17 @@ void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bo
 	}
 }
 
-void UPuzzlePlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool Success)
+void UPuzzlePlatformsGameInstance::OnDestroySessionComplete(FName SessionName, bool bWasSuccessful)
 {
-	if (Success)
+	if (bWasSuccessful)
 	{
 		CreateSession();
 	}
+}
+
+void UPuzzlePlatformsGameInstance::OnFindSessionComplete(bool bWasSuccessful)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Found session"));
 }
 
 void UPuzzlePlatformsGameInstance::CreateSession()

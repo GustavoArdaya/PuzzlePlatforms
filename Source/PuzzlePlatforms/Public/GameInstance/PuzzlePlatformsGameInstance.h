@@ -10,6 +10,7 @@
 
 class UMenuWidgetBase;
 class UMainMenu;
+class FOnlineSessionSearch;
 /**
  * 
  */
@@ -53,9 +54,11 @@ private:
 	UMenuWidgetBase* MainMenuWidget;
 	UMenuWidgetBase* InGameMenuWidget;
 
-	void OnCreateSessionComplete(FName SessionName, bool Success);
-	void OnDestroySessionComplete(FName SessionName, bool Success);
+	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
+	void OnFindSessionComplete(bool bWasSuccessful);
 	void CreateSession();
 	
 	IOnlineSessionPtr SessionInterface;
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
 };
