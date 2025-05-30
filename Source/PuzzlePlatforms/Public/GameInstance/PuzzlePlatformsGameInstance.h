@@ -49,6 +49,9 @@ public:
 	UFUNCTION(Exec)
 	virtual void LoadMainMenu() override;
 
+	UFUNCTION(BlueprintCallable, Exec)
+	void DebugNetworkEnvironment();
+
 private:
 
 	UMenuWidgetBase* MainMenuWidget;
@@ -56,7 +59,7 @@ private:
 
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
-	void OnFindSessionComplete(bool bWasSuccessful);
+	void OnFindSessionsComplete(bool bWasSuccessful);
 	void CreateSession();
 	
 	IOnlineSessionPtr SessionInterface;
