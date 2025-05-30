@@ -154,7 +154,7 @@ void UPuzzlePlatformsGameInstance::Join(const FString& Address)
 	if (MainMenuWidget)
     {
     	//MainMenuWidget->Teardown();
-		MainMenuWidget->SetServerList();
+		MainMenuWidget->SetServerList({"Test1", "Test2", "Test3", "Test4", "Test5"});
     }
 
 	/*if (GEngine)
