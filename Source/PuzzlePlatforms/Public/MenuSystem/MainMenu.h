@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "MainMenu.generated.h"
 
+class UServerRow;
 /**
  * 
  */
@@ -22,6 +23,9 @@ public:
 protected:
 	
 	virtual bool Initialize() override;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSoftClassPtr<UUserWidget> ServerRowClass;
 	
 private:
 
@@ -41,7 +45,7 @@ private:
 	class UButton* QuitGameButton;
 
 	UPROPERTY(Meta = (BindWidget))
-	class UEditableTextBox* IPAddressField;
+	class UPanelWidget* ServerList;
 
 	UPROPERTY(Meta = (BindWidget))
 	class UWidgetSwitcher* MenuSwitcher;
@@ -66,5 +70,7 @@ private:
 
 	UFUNCTION()
 	void QuitGame();
+
+	UServerRow* ServerRowWidget;
 	
 };

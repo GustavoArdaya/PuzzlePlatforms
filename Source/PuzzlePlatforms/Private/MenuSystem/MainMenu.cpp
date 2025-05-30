@@ -7,6 +7,7 @@
 #include "Components/EditableTextBox.h"
 #include "Components/WidgetSwitcher.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "MenuSystem/ServerRow.h"
 
 UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -38,14 +39,22 @@ void UMainMenu::HostServer()
 
 void UMainMenu::JoinServer()
 {
-	if (MenuInterface && IPAddressField)
+	if (MenuInterface && ServerList)
 	{
-		const FString& Address = IPAddressField->GetText().ToString();
-		const FString& HintText = IPAddressField->GetHintText().ToString();
+		if (UClass* ServerRowLoadedClass = ServerRowClass.LoadSynchronous())
+		{
+			ServerRowWidget = CreateWidget<UServerRow>(this, ServerRowLoadedClass);
+			if (ServerRowWidget)
+			{
+				ServerList->AddChild(ServerRowWidget);
+			}
+		}
+		/*const FString& Address = ServerList->GetText().ToString();
+		const FString& HintText = ServerList->GetHintText().ToString();
 		if (!Address.Equals(HintText))
 		{
-			MenuInterface->Join(IPAddressField->GetText().ToString());			
-		}
+			MenuInterface->Join(ServerList->GetText().ToString());			
+		}*/
 	}
 }
 
