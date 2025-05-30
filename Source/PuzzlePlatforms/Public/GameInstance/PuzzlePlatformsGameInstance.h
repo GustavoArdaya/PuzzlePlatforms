@@ -8,6 +8,7 @@
 #include "MenuSystem/MenuInterface.h"
 #include "PuzzlePlatformsGameInstance.generated.h"
 
+class UInGameMenu;
 class UMenuWidgetBase;
 class UMainMenu;
 class FOnlineSessionSearch;
@@ -24,10 +25,10 @@ public:
 	UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer);
 
 	UPROPERTY(EditDefaultsOnly)
-	TSoftClassPtr<UUserWidget> MenuWidgetClass;
+	TSoftClassPtr<UMainMenu> MenuWidgetClass;
 
 	UPROPERTY(EditDefaultsOnly)
-	TSoftClassPtr<UUserWidget> InGameMenuClass;
+	TSoftClassPtr<UInGameMenu> InGameMenuClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Main Menu")
 	TSoftObjectPtr<UWorld> MainMenuMap;
@@ -49,13 +50,16 @@ public:
 	UFUNCTION(Exec)
 	virtual void LoadMainMenu() override;
 
+	UFUNCTION(Exec)
+	virtual void RefreshServerList() override;
+
 	UFUNCTION(BlueprintCallable, Exec)
 	void DebugNetworkEnvironment();
 
 private:
 
-	UMenuWidgetBase* MainMenuWidget;
-	UMenuWidgetBase* InGameMenuWidget;
+	UMainMenu* MainMenuWidget;
+	UInGameMenu* InGameMenuWidget;
 
 	void OnCreateSessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);

@@ -18,7 +18,9 @@ class UMainMenu : public UMenuWidgetBase
 
 public:
 
-	UMainMenu(const FObjectInitializer& ObjectInitializer);		
+	UMainMenu(const FObjectInitializer& ObjectInitializer);
+
+	void SetServerList(TArray<FString> ServerNames);
 
 protected:
 	
@@ -71,6 +73,6 @@ private:
 	UFUNCTION()
 	void QuitGame();
 
-	UServerRow* ServerRowWidget;
+	UServerRow* Row;
 	
 };

@@ -5,6 +5,7 @@
 
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
+#include "Components/TextBlock.h"
 #include "Components/WidgetSwitcher.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "MenuSystem/ServerRow.h"
@@ -14,6 +15,8 @@ UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer)
 {	
 	SetIsFocusable(true);
 }
+
+
 
 bool UMainMenu::Initialize()
 {
@@ -37,24 +40,28 @@ void UMainMenu::HostServer()
 	}
 }
 
-void UMainMenu::JoinServer()
+void UMainMenu::SetServerList(TArray<FString> ServerNames)
 {
-	if (MenuInterface && ServerList)
+	ServerList->ClearChildren();	
+	for (const FString& ServerName : ServerNames)
 	{
 		if (UClass* ServerRowLoadedClass = ServerRowClass.LoadSynchronous())
 		{
-			ServerRowWidget = CreateWidget<UServerRow>(this, ServerRowLoadedClass);
-			if (ServerRowWidget)
+			Row = CreateWidget<UServerRow>(this, ServerRowLoadedClass);
+			if (Row)
 			{
-				ServerList->AddChild(ServerRowWidget);
+				Row->ServerName->SetText(FText::FromString(ServerName));
+				ServerList->AddChild(Row);
 			}
 		}
-		/*const FString& Address = ServerList->GetText().ToString();
-		const FString& HintText = ServerList->GetHintText().ToString();
-		if (!Address.Equals(HintText))
-		{
-			MenuInterface->Join(ServerList->GetText().ToString());			
-		}*/
+	}	
+}
+
+void UMainMenu::JoinServer()
+{
+	if (MenuInterface && ServerList)
+	{		
+		MenuInterface->Join("");					
 	}
 }
 
@@ -63,6 +70,10 @@ void UMainMenu::OpenJoinMenu()
 	if (MenuSwitcher && JoinMenu)
 	{
 		MenuSwitcher->SetActiveWidget(JoinMenu);
+		if (MenuInterface)
+		{
+			MenuInterface->RefreshServerList();
+		}
 	}
 }
 
