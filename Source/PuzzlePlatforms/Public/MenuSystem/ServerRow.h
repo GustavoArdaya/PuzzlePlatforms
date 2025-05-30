@@ -6,7 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "ServerRow.generated.h"
 
+class UButton;
 class UTextBlock;
+class UMainMenu;
 /**
  * 
  */
@@ -20,5 +22,17 @@ public:
 	UPROPERTY(Meta = (BindWidget))
 	UTextBlock* ServerName;
 	
+	void Setup(UMainMenu* InParent, uint32 InIndex);
+
+private:
 	
+	UPROPERTY(Meta = (BindWidget))
+	UButton* RowButton;
+
+	UMainMenu* Parent;
+
+	uint32 Index;
+
+	UFUNCTION()
+	void OnClicked();
 };

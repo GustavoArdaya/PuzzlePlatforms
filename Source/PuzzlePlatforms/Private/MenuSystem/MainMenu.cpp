@@ -42,7 +42,8 @@ void UMainMenu::HostServer()
 
 void UMainMenu::SetServerList(TArray<FString> ServerNames)
 {
-	ServerList->ClearChildren();	
+	ServerList->ClearChildren();
+	uint32 Index = 0;
 	for (const FString& ServerName : ServerNames)
 	{
 		if (UClass* ServerRowLoadedClass = ServerRowClass.LoadSynchronous())
@@ -51,14 +52,29 @@ void UMainMenu::SetServerList(TArray<FString> ServerNames)
 			if (Row)
 			{
 				Row->ServerName->SetText(FText::FromString(ServerName));
+				Row->Setup(this, Index);
+				++Index;
 				ServerList->AddChild(Row);
 			}
 		}
 	}	
 }
 
+void UMainMenu::SelectIndex(uint32 Index)
+{
+	SelectedIndex = Index;
+}
+
 void UMainMenu::JoinServer()
 {
+	if (SelectedIndex.IsSet())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Selected index %d"), SelectedIndex.GetValue());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No selected index"));
+	}
 	if (MenuInterface && ServerList)
 	{		
 		MenuInterface->Join("");					
