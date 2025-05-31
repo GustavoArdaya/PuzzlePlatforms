@@ -67,17 +67,14 @@ void UMainMenu::SelectIndex(uint32 Index)
 
 void UMainMenu::JoinServer()
 {
-	if (SelectedIndex.IsSet())
+	if (SelectedIndex.IsSet() && MenuInterface)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Selected index %d"), SelectedIndex.GetValue());
+		MenuInterface->Join(SelectedIndex.GetValue());		
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No selected index"));
-	}
-	if (MenuInterface && ServerList)
-	{		
-		MenuInterface->Join("");					
 	}
 }
 
