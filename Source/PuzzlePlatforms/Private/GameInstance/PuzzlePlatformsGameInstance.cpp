@@ -95,14 +95,14 @@ FOnlineSessionSettings UPuzzlePlatformsGameInstance::CreateDefaultSessionSetting
 {
 	FOnlineSessionSettings SessionSettings;
 
-	SessionSettings.bIsLANMatch = false;
+	SessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL";
 	SessionSettings.NumPublicConnections = 2;
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.bUseLobbiesIfAvailable = true;
 
 	SessionSettings.Set(GAME_TAG_KEY, GAME_TAG_VALUE, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-	SessionSettings.Set(SERVER_NAME_KEY, FString("Gus's PuzzlePlatforms"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	//SessionSettings.Set(SERVER_NAME_KEY, FString("Gus's PuzzlePlatforms"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 	return SessionSettings;
 }
@@ -130,37 +130,48 @@ void UPuzzlePlatformsGameInstance::RefreshServerList()
 
 void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 {
-	if (bWasSuccessful && SessionSearch.IsValid() && MainMenuWidget)
+	if (!SessionSearch.IsValid())
 	{
-		TArray<FString> ServerNames;
-		// TEST Elements:
-		ServerNames.Add("Test Server 1");
-		ServerNames.Add("Test Server 2");
-		ServerNames.Add("Test Server 3");
+		UE_LOG(LogTemp, Warning, TEXT("SessionSearch is invalid in OnFindSessionsComplete"));
+		return;
+	}
 
-		for (const FOnlineSessionSearchResult& SearchResult : SessionSearch->SearchResults)
+	TArray<FServerData> ServerList;
+
+	if (bWasSuccessful)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found %d sessions"), SessionSearch->SearchResults.Num());
+
+		for (const FOnlineSessionSearchResult& Result : SessionSearch->SearchResults)
 		{
-			if (!SearchResult.IsValid()) continue;
+			FServerData ServerData;
 
-			FString FoundTag;
-			if (!SearchResult.Session.SessionSettings.Get(GAME_TAG_KEY, FoundTag) || FoundTag != GAME_TAG_VALUE) continue;
+			ServerData.ServerName = Result.GetSessionIdStr();
+			ServerData.MaxPlayers = Result.Session.SessionSettings.NumPublicConnections;
+			ServerData.CurrentPlayers = Result.Session.NumOpenPublicConnections;
 
-			FString CustomName;
-			FString SessionOwner = SearchResult.Session.OwningUserName;
-
-			if (SearchResult.Session.SessionSettings.Get(SERVER_NAME_KEY, CustomName))
+			FString HostName;
+			if (Result.Session.OwningUserName.IsEmpty())
 			{
-				UE_LOG(LogTemp, Warning, TEXT("Found Session: Owner=%s | CustomName=%s"), *SessionOwner, *CustomName);
+				HostName = TEXT("Unknown Host");
 			}
 			else
 			{
-				CustomName = SessionOwner;
+				HostName = Result.Session.OwningUserName;
 			}
+			ServerData.HostUserName = HostName;
 
-			ServerNames.Add(CustomName);
+			ServerList.Add(ServerData);
 		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FindSessions failed."));
+	}
 
-		MainMenuWidget->SetServerList(ServerNames);
+	if (MainMenuWidget)
+	{
+		MainMenuWidget->SetServerList(ServerList); // Make sure SetServerList accepts TArray<FServerData>
 	}
 }
 

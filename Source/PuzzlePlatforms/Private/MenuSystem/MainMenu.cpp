@@ -41,18 +41,25 @@ void UMainMenu::HostServer()
 	}
 }
 
-void UMainMenu::SetServerList(TArray<FString> ServerNames)
+void UMainMenu::SetServerList(TArray<FServerData> ServerNames)
 {
 	ServerList->ClearChildren();
 	uint32 Index = 0;
-	for (const FString& ServerName : ServerNames)
+	for (const FServerData& ServerData : ServerNames)
 	{
 		if (UClass* ServerRowLoadedClass = ServerRowClass.LoadSynchronous())
 		{
 			Row = CreateWidget<UServerRow>(this, ServerRowLoadedClass);
 			if (Row)
 			{
-				Row->ServerName->SetText(FText::FromString(ServerName));
+				Row->ServerName->SetText(FText::FromString(ServerData.ServerName));
+				Row->HostName->SetText(FText::FromString(ServerData.HostUserName));
+				const FText PlayerCount = FText::Format(
+					NSLOCTEXT("UI.PlayerCount", "PlayerCountFormat", "{0}/{1}"),
+					FText::AsNumber(ServerData.CurrentPlayers),
+					FText::AsNumber(ServerData.MaxPlayers)
+				);
+				Row->PlayerCount->SetText(PlayerCount);
 				Row->Setup(this, Index);
 				++Index;
 				ServerList->AddChild(Row);

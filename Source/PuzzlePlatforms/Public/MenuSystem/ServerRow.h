@@ -22,6 +22,12 @@ public:
 	UPROPERTY(Meta = (BindWidget))
 	UTextBlock* ServerName;
 
+	UPROPERTY(Meta = (BindWidget))
+	UTextBlock* HostName;
+
+	UPROPERTY(Meta = (BindWidget))
+	UTextBlock* PlayerCount;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsSelected = false;
 	
