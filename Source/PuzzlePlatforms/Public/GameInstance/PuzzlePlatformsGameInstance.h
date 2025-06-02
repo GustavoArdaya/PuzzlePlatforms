@@ -69,4 +69,8 @@ private:
 	
 	IOnlineSessionPtr SessionInterface;
 	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
+	// New
+	FOnlineSessionSettings CreateDefaultSessionSettings();
+	TSharedPtr<FOnlineSessionSearch> CreateDefaultSessionSearch();
 };

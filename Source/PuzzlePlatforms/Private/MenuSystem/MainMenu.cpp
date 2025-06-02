@@ -3,6 +3,7 @@
 
 #include "MenuSystem/MainMenu.h"
 
+#include "VisualizeTexture.h"
 #include "Components/Button.h"
 #include "Components/EditableTextBox.h"
 #include "Components/TextBlock.h"
@@ -63,6 +64,18 @@ void UMainMenu::SetServerList(TArray<FString> ServerNames)
 void UMainMenu::SelectIndex(uint32 Index)
 {
 	SelectedIndex = Index;
+	UpdateChildren();
+}
+
+void UMainMenu::UpdateChildren()
+{
+	for (int32 i = 0; i < ServerList->GetChildrenCount(); i++)
+	{
+		if (auto ServerRow = Cast<UServerRow>(ServerList->GetChildAt(i)))
+		{
+			ServerRow->bIsSelected = SelectedIndex.IsSet() && SelectedIndex.GetValue() == i;
+		}
+	}
 }
 
 void UMainMenu::JoinServer()
@@ -105,3 +118,5 @@ void UMainMenu::QuitGame()
 		UKismetSystemLibrary::QuitGame(GetWorld(), PlayerController, EQuitPreference::Quit, false);
 	}
 }
+
+

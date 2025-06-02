@@ -78,5 +78,7 @@ private:
 	UServerRow* Row;
 
 	TOptional<uint32> SelectedIndex;
+
+	void UpdateChildren();
 	
 };

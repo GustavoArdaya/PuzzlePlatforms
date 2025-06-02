@@ -21,6 +21,9 @@ public:
 
 	UPROPERTY(Meta = (BindWidget))
 	UTextBlock* ServerName;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsSelected = false;
 	
 	void Setup(UMainMenu* InParent, uint32 InIndex);
 
