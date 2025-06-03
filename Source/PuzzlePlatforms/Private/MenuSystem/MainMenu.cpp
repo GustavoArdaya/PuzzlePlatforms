@@ -5,6 +5,7 @@
 
 #include "VisualizeTexture.h"
 #include "Components/Button.h"
+#include "Components/EditableText.h"
 #include "Components/EditableTextBox.h"
 #include "Components/TextBlock.h"
 #include "Components/WidgetSwitcher.h"
@@ -39,7 +40,8 @@ void UMainMenu::HostServer()
 	UE_LOG(LogTemp, Display, TEXT("Host Button Clicked"));
 	if (MenuInterface)
 	{
-		MenuInterface->Host("Test");
+		const FString ServerNameString = ServerHostName->GetText().ToString();
+		MenuInterface->Host(ServerNameString);
 	}
 }
 

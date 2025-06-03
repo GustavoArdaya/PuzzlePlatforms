@@ -66,6 +66,9 @@ private:
 	class UButton* QuitGameButton;
 
 	UPROPERTY(Meta = (BindWidget))
+	class UEditableText* ServerHostName;
+
+	UPROPERTY(Meta = (BindWidget))
 	class UPanelWidget* ServerList;
 
 	UPROPERTY(Meta = (BindWidget))
