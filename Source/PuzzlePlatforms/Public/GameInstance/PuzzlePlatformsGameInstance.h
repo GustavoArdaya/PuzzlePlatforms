@@ -30,8 +30,11 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TSoftClassPtr<UInGameMenu> InGameMenuClass;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Main Menu")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Maps")
 	TSoftObjectPtr<UWorld> MainMenuMap;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Maps")
+	TSoftObjectPtr<UWorld> LobbyMap;
 
 	virtual void Init() override;
 

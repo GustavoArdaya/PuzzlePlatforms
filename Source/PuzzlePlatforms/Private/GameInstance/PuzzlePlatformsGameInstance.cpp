@@ -247,9 +247,10 @@ void UPuzzlePlatformsGameInstance::OnCreateSessionComplete(FName SessionName, bo
 		GEngine->AddOnScreenDebugMessage(0, 2, FColor::Green, TEXT("Hosting"));
 	}
 
-	if (UWorld* World = GetWorld())
+	if (UWorld* World = GetWorld(); LobbyMap.ToSoftObjectPath().IsValid())
 	{
-		World->ServerTravel(TEXT("/Game/ThirdPerson/Maps/ThirdPersonMap?listen"));
+		FString LobbyMapPath = FPackageName::ObjectPathToPackageName(LobbyMap.ToSoftObjectPath().ToString()) + "?listen";
+		World->ServerTravel(LobbyMapPath);
 	}
 }
 
