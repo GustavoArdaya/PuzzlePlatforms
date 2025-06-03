@@ -67,8 +67,9 @@ void UPuzzlePlatformsGameInstance::LoadInGameMenu()
 	}
 }
 
-void UPuzzlePlatformsGameInstance::Host()
+void UPuzzlePlatformsGameInstance::Host(FString ServerName)
 {
+	DesiredServerName = ServerName;
 	if (SessionInterface.IsValid())
 	{
 		if (FNamedOnlineSession* ExistingSession = SessionInterface->GetNamedSession(SESSION_NAME))
@@ -100,9 +101,10 @@ FOnlineSessionSettings UPuzzlePlatformsGameInstance::CreateDefaultSessionSetting
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.bUseLobbiesIfAvailable = true;
+	SessionSettings.Set(SERVER_NAME_KEY, DesiredServerName, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	
 
 	SessionSettings.Set(GAME_TAG_KEY, GAME_TAG_VALUE, EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
-	//SessionSettings.Set(SERVER_NAME_KEY, FString("Gus's PuzzlePlatforms"), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 
 	return SessionSettings;
 }
@@ -146,20 +148,26 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 		{
 			FServerData ServerData;
 
-			ServerData.ServerName = Result.GetSessionIdStr();
+			//ServerData.ServerName = Result.GetSessionIdStr();
 			ServerData.MaxPlayers = Result.Session.SessionSettings.NumPublicConnections;
 			ServerData.CurrentPlayers = ServerData.MaxPlayers - Result.Session.NumOpenPublicConnections;
 
-			FString HostName;
 			if (Result.Session.OwningUserName.IsEmpty())
 			{
-				HostName = TEXT("Unknown Host");
+				ServerData.HostUserName = TEXT("Unknown Host");
 			}
 			else
 			{
-				HostName = Result.Session.OwningUserName;
+				ServerData.HostUserName = Result.Session.OwningUserName;
 			}
-			ServerData.HostUserName = HostName;
+			if (FString ServerName; Result.Session.SessionSettings.Get(SERVER_NAME_KEY, ServerName))
+			{
+				ServerData.ServerName = ServerName;
+			}
+			else
+			{
+				ServerData.ServerName = TEXT("Unknown Server");
+			}
 
 			ServerList.Add(ServerData);
 		}
@@ -171,7 +179,7 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 
 	if (MainMenuWidget)
 	{
-		MainMenuWidget->SetServerList(ServerList); // Make sure SetServerList accepts TArray<FServerData>
+		MainMenuWidget->SetServerList(ServerList); 
 	}
 }
 

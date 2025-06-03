@@ -21,10 +21,12 @@ UMainMenu::UMainMenu(const FObjectInitializer& ObjectInitializer)
 
 bool UMainMenu::Initialize()
 {
-	if (!Super::Initialize() || !HostButton || !JoinMenuButton) return false;
+	if (!Super::Initialize()) return false;
 
 	JoinMenuButton->OnClicked.AddDynamic(this, &ThisClass::OpenJoinMenu);
-	BackButton->OnClicked.AddDynamic(this, &ThisClass::OpenMainMenu);
+	BackButtonJoin->OnClicked.AddDynamic(this, &ThisClass::OpenMainMenu);
+	HostMenuButton->OnClicked.AddDynamic(this, &ThisClass::OpenHostMenu);
+	BackButtonHost->OnClicked.AddDynamic(this, &ThisClass::OpenMainMenu);
 	HostButton->OnClicked.AddDynamic(this, &ThisClass::HostServer);
 	JoinButton->OnClicked.AddDynamic(this, &ThisClass::JoinServer);
 	QuitGameButton->OnClicked.AddDynamic(this, &ThisClass::QuitGame);
@@ -37,7 +39,7 @@ void UMainMenu::HostServer()
 	UE_LOG(LogTemp, Display, TEXT("Host Button Clicked"));
 	if (MenuInterface)
 	{
-		MenuInterface->Host();
+		MenuInterface->Host("Test");
 	}
 }
 
@@ -95,6 +97,18 @@ void UMainMenu::JoinServer()
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No selected index"));
+	}
+}
+
+void UMainMenu::OpenHostMenu()
+{
+	if (MenuSwitcher && HostMenu)
+	{
+		MenuSwitcher->SetActiveWidget(HostMenu);
+		/*if (MenuInterface)
+		{
+			MenuInterface->RefreshServerList();
+		}*/
 	}
 }
 

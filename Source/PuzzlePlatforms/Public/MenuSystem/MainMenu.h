@@ -45,16 +45,22 @@ protected:
 private:
 
 	UPROPERTY(Meta = (BindWidget))
+	class UButton* HostMenuButton;
+
+	UPROPERTY(Meta = (BindWidget))
 	class UButton* HostButton;
 
 	UPROPERTY(Meta = (BindWidget))
-	class UButton* JoinMenuButton;
+	class UButton* BackButtonHost;
 
 	UPROPERTY(Meta = (BindWidget))
-	class UButton* BackButton;
+	class UButton* JoinMenuButton;	
 
 	UPROPERTY(Meta = (BindWidget))
 	class UButton* JoinButton;
+
+	UPROPERTY(Meta = (BindWidget))
+	class UButton* BackButtonJoin;
 
 	UPROPERTY(Meta = (BindWidget))
 	class UButton* QuitGameButton;
@@ -69,6 +75,9 @@ private:
 	class UWidget* MainMenu;
 
 	UPROPERTY(Meta = (BindWidget))
+	class UWidget* HostMenu;
+	
+	UPROPERTY(Meta = (BindWidget))
 	class UWidget* JoinMenu;
 
 	UFUNCTION()
@@ -77,6 +86,9 @@ private:
 	UFUNCTION()
 	void JoinServer();
 
+	UFUNCTION()
+	void OpenHostMenu();
+	
 	UFUNCTION()
 	void OpenJoinMenu();
 

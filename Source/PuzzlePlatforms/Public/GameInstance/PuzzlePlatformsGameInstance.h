@@ -42,7 +42,7 @@ public:
 	void LoadInGameMenu();
 
 	UFUNCTION(Exec)
-	virtual void Host() override;
+	virtual void Host(FString ServerName) override;
 	
 	UFUNCTION(Exec)
 	virtual void Join(uint32 Index) override;
@@ -65,6 +65,8 @@ private:
 	void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 	void OnFindSessionsComplete(bool bWasSuccessful);
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
+
+	FString DesiredServerName;
 	void CreateSession();
 	
 	IOnlineSessionPtr SessionInterface;
