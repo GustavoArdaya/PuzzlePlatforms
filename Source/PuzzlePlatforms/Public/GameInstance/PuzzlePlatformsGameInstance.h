@@ -36,6 +36,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Maps")
 	TSoftObjectPtr<UWorld> LobbyMap;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Maps")
+	TSoftObjectPtr<UWorld> GameMap;
+
 	virtual void Init() override;
 
 	UFUNCTION(BlueprintCallable, Exec)
