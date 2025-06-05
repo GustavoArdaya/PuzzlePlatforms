@@ -45,11 +45,7 @@ void ALobbyGameMode::UpdatePlayerCountInMetadata()
 }
 
 void ALobbyGameMode::StartGame()
-{
-	
-
-	
-	
+{	
 	if (UWorld* World = GetWorld();
 			UPuzzlePlatformsGameInstance* GameInstance = Cast<UPuzzlePlatformsGameInstance>(GetGameInstance()))
 	{
