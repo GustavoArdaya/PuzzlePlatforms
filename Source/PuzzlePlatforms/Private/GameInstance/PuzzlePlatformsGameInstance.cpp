@@ -6,11 +6,12 @@
 #include "MenuSystem/InGameMenu.h"
 #include "MenuSystem/MainMenu.h"
 #include "Online/OnlineSessionNames.h"
+#include "PuzzlePlatformsSessionConstants.h"
 
-const static FName SESSION_NAME = TEXT("My Session Game");
-const static FName SERVER_NAME_KEY = TEXT("ServerName");
-const static FName GAME_TAG_KEY = TEXT("GameTag");
-const static FString GAME_TAG_VALUE = TEXT("PuzzlePlatforms");
+const FName SESSION_NAME = TEXT("My Session Game");
+const FName SERVER_NAME_KEY = TEXT("ServerName");
+const FName GAME_TAG_KEY = TEXT("GameTag");
+const FString GAME_TAG_VALUE = TEXT("PuzzlePlatforms");
 
 UPuzzlePlatformsGameInstance::UPuzzlePlatformsGameInstance(const FObjectInitializer& ObjectInitializer)
 {
@@ -148,9 +149,19 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 		{
 			FServerData ServerData;
 
-			//ServerData.ServerName = Result.GetSessionIdStr();
 			ServerData.MaxPlayers = Result.Session.SessionSettings.NumPublicConnections;
-			ServerData.CurrentPlayers = ServerData.MaxPlayers - Result.Session.NumOpenPublicConnections;
+
+			// Attempt to get CURRENT_PLAYERS from metadata
+			int32 CurrentPlayers = 0;
+			if (Result.Session.SessionSettings.Get(FName("CURRENT_PLAYERS"), CurrentPlayers))
+			{
+				ServerData.CurrentPlayers = CurrentPlayers;
+			}
+			else
+			{
+				// Fallback if not available
+				ServerData.CurrentPlayers = ServerData.MaxPlayers - Result.Session.NumOpenPublicConnections;
+			}
 
 			if (Result.Session.OwningUserName.IsEmpty())
 			{
@@ -160,6 +171,7 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 			{
 				ServerData.HostUserName = Result.Session.OwningUserName;
 			}
+
 			if (FString ServerName; Result.Session.SessionSettings.Get(SERVER_NAME_KEY, ServerName))
 			{
 				ServerData.ServerName = ServerName;
@@ -179,7 +191,7 @@ void UPuzzlePlatformsGameInstance::OnFindSessionsComplete(bool bWasSuccessful)
 
 	if (MainMenuWidget)
 	{
-		MainMenuWidget->SetServerList(ServerList); 
+		MainMenuWidget->SetServerList(ServerList);
 	}
 }
 
