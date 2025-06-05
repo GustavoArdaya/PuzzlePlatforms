@@ -53,11 +53,15 @@ public:
 	UFUNCTION(Exec)
 	virtual void Join(uint32 Index) override;
 
+
 	UFUNCTION(Exec)
 	virtual void LoadMainMenu() override;
 
 	UFUNCTION(Exec)
 	virtual void RefreshServerList() override;
+	
+	UFUNCTION(Exec)
+	void StartSession();
 
 	UFUNCTION(BlueprintCallable, Exec)
 	void DebugNetworkEnvironment();

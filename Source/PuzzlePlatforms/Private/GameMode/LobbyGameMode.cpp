@@ -14,16 +14,9 @@ void ALobbyGameMode::PostLogin(APlayerController* NewPlayer)
 	PlayerCount++;
 	UpdatePlayerCountInMetadata();
 
-	if (PlayerCount >= 3)
+	if (PlayerCount >= 2)
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Number of players: %d"), PlayerCount);
-		if (UWorld* World = GetWorld();
-			const UPuzzlePlatformsGameInstance* GameInstance = Cast<UPuzzlePlatformsGameInstance>(GetGameInstance()))
-		{
-			const FString GameMapPath = FPackageName::ObjectPathToPackageName(GameInstance->GameMap.ToSoftObjectPath().ToString()) + "?listen";
-			bUseSeamlessTravel = true;
-			World->ServerTravel(GameMapPath);
-		}
+		GetWorldTimerManager().SetTimer(GameStartTimerHandle, this, &ThisClass::StartGame, Delay);		
 	}
 }
 
@@ -48,5 +41,21 @@ void ALobbyGameMode::UpdatePlayerCountInMetadata()
 				SessionInterface->UpdateSession(Session->SessionName, Session->SessionSettings, true);
 			}
 		}
+	}
+}
+
+void ALobbyGameMode::StartGame()
+{
+	
+
+	
+	
+	if (UWorld* World = GetWorld();
+			UPuzzlePlatformsGameInstance* GameInstance = Cast<UPuzzlePlatformsGameInstance>(GetGameInstance()))
+	{
+		GameInstance->StartSession();
+		const FString GameMapPath = FPackageName::ObjectPathToPackageName(GameInstance->GameMap.ToSoftObjectPath().ToString()) + "?listen";
+		bUseSeamlessTravel = true;
+		World->ServerTravel(GameMapPath);
 	}
 }

@@ -21,7 +21,13 @@ public:
 
 private:
 
-	int32 PlayerCount = 0;
-
 	void UpdatePlayerCountInMetadata();
+	void StartGame();
+	
+	FTimerHandle GameStartTimerHandle;
+
+	UPROPERTY(EditDefaultsOnly)
+	float Delay = 10.f;
+	int32 PlayerCount = 0;
+	
 };

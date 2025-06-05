@@ -98,7 +98,7 @@ FOnlineSessionSettings UPuzzlePlatformsGameInstance::CreateDefaultSessionSetting
 	FOnlineSessionSettings SessionSettings;
 
 	SessionSettings.bIsLANMatch = IOnlineSubsystem::Get()->GetSubsystemName() == "NULL";
-	SessionSettings.NumPublicConnections = 2;
+	SessionSettings.NumPublicConnections = 5;
 	SessionSettings.bShouldAdvertise = true;
 	SessionSettings.bUsesPresence = true;
 	SessionSettings.bUseLobbiesIfAvailable = true;
@@ -128,6 +128,14 @@ void UPuzzlePlatformsGameInstance::RefreshServerList()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Starting FindSessions with filters"));
 		SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
+	}
+}
+
+void UPuzzlePlatformsGameInstance::StartSession()
+{
+	if (SessionInterface.IsValid())
+	{
+		SessionInterface->StartSession(SESSION_NAME);
 	}
 }
 
